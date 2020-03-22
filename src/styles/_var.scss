@@ -1,0 +1,100 @@
+$font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+$basic-black: #000000;
+$basic-white: #FFFFFF;
+
+$primary-font: #303133;
+$normal-font: #606266;
+$minor-font: #909399;
+$placeholder-font: #c0c4cc;
+
+$level1-border: #dcdfe6;
+$level2-border: #E4E7ED;
+$level3-border: #EBEEF5;
+$level4-border: #F2F6FC;
+
+$border-radius: 4px;
+
+$primary: #409EFF;
+$success: #67C23A;
+$warning: #E6A23C;
+$danger: #F56C6C;
+$info: #909399;
+
+$primary-hover: #66b1ff;
+$success-hover: #85ce61;
+$warning-hover: #ebb563;
+$danger-hover: #f78989;
+$info-hover: #a6a9ad;
+
+$primary-active: #3a8ee6;
+$success-active: #5daf34;
+$warning-active: #cf9236;
+$danger-active: #dd6161;
+$info-active: #82848a;
+
+$primary-disabled: #a0cfff;
+$success-disabled: #b3e19d;
+$info-disabled: #c8c9cc;
+$warning-disabled: #f3d19e;
+$danger-disabled: #fab6b6;
+
+$primary-plain: #ecf5ff;
+$success-plain: #f0f9eb;
+$info-plain: #f4f4f5;
+$warning-plain: #fdf6ec;
+$danger-plain: #fef0f0;
+
+$--sm: 768px !default;
+$--md: 992px !default;
+$--lg: 1200px !default;
+$--xl: 1920px !default;
+$map:(
+    "xs":(max-width: $--sm -1),
+    "sm":(min-width: $--sm),
+    "md":(min-width: $--md),
+    "lg":(min-width: $--lg),
+    "xl":(min-width: $--xl)
+);
+
+@mixin res($key) {
+    @media screen and #{inspect(map-get($map,$key))} {
+        @content;
+    }
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    line-height: 1;
+    font-size: 14px;
+    list-style: none;
+}
+
+.icon {
+    width: 1.2em; height: 1.2em;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+    position: relative;
+}
+
+@keyframes rotating {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(1turn);
+    }
+}
+  
+.v-icon-loading svg {
+    animation: rotating 2s linear infinite;
+}
+
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+    color: $placeholder-font;
+    font-family: $font-family;
+}

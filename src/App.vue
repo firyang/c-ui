@@ -1,0 +1,81 @@
+<template>
+	<div id="app">
+		<!-- upload -->
+		<div class="time-line">
+			<v-time-line :time-list="timeList"
+				:scale-value="20"
+				:space-num="4"
+				@click="getValue"></v-time-line>
+			<br>
+			<button @click="changeTime">click</button>
+		</div>
+		<div v-if="false">
+			<v-upload name="myUpload"
+				accept="image/jpeg"
+				action="http://localhost:3000/upload"
+				:file-list="fileList"
+				multiple>
+				<v-button type="primary"
+					size="small">点击上传</v-button>
+				<p slot="tip">只能上传jpg/png文件，且不超过500kb</p>
+			</v-upload>
+		</div>
+	</div>
+</template>
+
+<script>
+export default {
+	data() {
+		return {
+			fileList: [
+				{ name: 'food.jpg', url: 'https://xxx.cdn.com/xxx.jpg' }
+			],
+			timeList: [
+				{ begin_time: 1584663810000, end_time: 1584679572000 },
+				{ begin_time: 1584708272114, end_time: 1584719908754 },
+				{ begin_time: 1584637782000, end_time: 1584647361600 }
+			]
+		}
+	},
+	methods: {
+		changeTime() {
+			this.timeList = [
+				{ begin_time: 1584663810000, end_time: 1584679572000 }
+			]
+			console.log(this.timeList)
+		},
+		getValue(value) {
+			console.log(value)
+		}
+	}
+}
+</script>
+
+<style lang="scss">
+@import './styles/_var';
+#app {
+	padding: 20px;
+	h3 {
+		padding: 20px 0;
+	}
+}
+.mgRight {
+	margin-right: 20px;
+}
+.prefix-icon {
+	display: inline-block;
+	color: $placeholder-font;
+	position: absolute;
+	left: 12px;
+	top: 50%;
+	transform: translateY(-50%);
+	cursor: pointer;
+	:hover {
+		color: $minor-font;
+	}
+}
+.time-line {
+	margin: 0 auto;
+	width: 800px;
+}
+</style>
