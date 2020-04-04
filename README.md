@@ -1,14 +1,14 @@
-## vui
+## c-ui
 
 ## QuickStart
 ```bash
-npm install vui
+npm install c-ui
 ```
 
 
-## usage
+## Usage
 ```
-import Vui from 'vui'
-import 'vui/dist/vui.css'
-Vue.use(Vui)
+import cui from 'c-ui'
+import 'c-ui/dist/c-ui.css'
+Vue.use(cui)
 ```

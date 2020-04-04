@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import App from './App.vue'
-import Vui from './packages'
+import Cui from './packages'
 
-Vue.use(Vui)
+Vue.use(Cui)
 
 new Vue({
     render: h => h(App),
