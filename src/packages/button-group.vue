@@ -1,34 +1,34 @@
 <template>
-	<div class="v-button-group">
+	<div class="c-button-group">
 		<slot></slot>
 	</div>
 </template>
 
 <script>
 export default {
-	name: 'v-button-group'
+	name: 'c-button-group'
 }
 </script>
 
 <style lang="scss">
 @import '../styles/_var';
 
-.v-button-group {
+.c-button-group {
 	display: inline-flex;
 	justify-content: center;
-	.v-button {
+	.c-button {
 		position: relative;
 		border-radius: 0;
 	}
-	.v-button:first-child {
+	.c-button:first-child {
 		border-top-left-radius: $border-radius;
 		border-bottom-left-radius: $border-radius;
 	}
-	.v-button:last-child {
+	.c-button:last-child {
 		border-top-right-radius: $border-radius;
 		border-bottom-right-radius: $border-radius;
 	}
-	.v-button:not(:last-child)::after {
+	.c-button:not(:last-child)::after {
 		content: '';
 		display: block;
 		width: 0;

@@ -1,5 +1,5 @@
 <template>
-	<div class="v-footer"
+	<div class="c-footer"
 		:style="{height}">
 		<slot></slot>
 	</div>
@@ -7,7 +7,7 @@
 
 <script>
 export default {
-	name: 'v-footer',
+	name: 'c-footer',
 	props: {
 		height: {
 			type: String,

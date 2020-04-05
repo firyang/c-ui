@@ -1,5 +1,5 @@
 <template>
-	<button class="v-button"
+	<button class="c-button"
 		:class="btnClass"
 		:disabled="disabled"
 		:type="nativeType"
@@ -7,22 +7,22 @@
 		@click="$emit('click',$event)"
 		@focus="$emit('focus',$event)"
 		@blur="$emit('blur',$event)">
-		<v-icon :icon="icon"
-			v-if="icon && !isRight"></v-icon>
-		<v-icon icon="loading"
+		<c-icon :icon="icon"
+			v-if="icon && !isRight"></c-icon>
+		<c-icon icon="loading"
 			v-if="loading"
-			class="v-icon-loading"></v-icon>
+			class="c-icon-loading"></c-icon>
 		<span v-if="hasSlot">
 			<slot></slot>
 		</span>
-		<v-icon :icon="icon"
-			v-if="icon && isRight"></v-icon>
+		<c-icon :icon="icon"
+			v-if="icon && isRight"></c-icon>
 	</button>
 </template>
 
 <script>
 export default {
-	name: 'v-button',
+	name: 'c-button',
 	props: {
 		size: String,
 		type: String,
@@ -39,8 +39,8 @@ export default {
 	computed: {
 		btnClass() {
 			let classes = []
-			this.size && classes.push(`v-button-${this.size}`)
-			this.type && classes.push(`v-button-${this.type}`)
+			this.size && classes.push(`c-button-${this.size}`)
+			this.type && classes.push(`c-button-${this.type}`)
 			this.plain && classes.push(`is-plain`)
 			this.round && classes.push(`is-round`)
 			this.circle && classes.push(`is-circle`)
@@ -85,7 +85,7 @@ $disabled-map: (
 	danger: $danger-disabled
 );
 
-.v-button {
+.c-button {
 	height: 42px;
 	line-height: 42px;
 	padding: 0 20px;
@@ -138,10 +138,10 @@ $disabled-map: (
 		cursor: default;
 	}
 
-	.v-icon + span {
+	.c-icon + span {
 		margin-left: 5px;
 	}
-	span + .v-icon {
+	span + .c-icon {
 		margin-left: 5px;
 	}
 
@@ -177,7 +177,16 @@ $disabled-map: (
 		background: transparent;
 	}
 
-	@each $type, $color in (primary: $primary, success: $success, info: $info, warning: $warning, danger: $danger) {
+	@each $type,
+		$color
+			in (
+				primary: $primary,
+				success: $success,
+				info: $info,
+				warning: $warning,
+				danger: $danger
+			)
+	{
 		&-#{$type} {
 			background: #{$color};
 			border: 1px solid #{$color};

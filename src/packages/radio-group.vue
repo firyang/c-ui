@@ -1,5 +1,5 @@
 <template>
-	<div class="v-radio-group">
+	<div class="c-radio-group">
 		<slot></slot>
 		<input type="text"
 			hidden
@@ -10,7 +10,7 @@
 
 <script>
 export default {
-	name: 'v-radio-group',
+	name: 'c-radio-group',
 	props: {
 		value: [String, Number, Boolean],
 		size: String,
@@ -34,7 +34,7 @@ export default {
 </script>
 
 <style lang="scss">
-.v-radio-group {
+.c-radio-group {
 	display: inline-flex;
 	vertical-align: middle;
 }

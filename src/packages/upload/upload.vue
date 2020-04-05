@@ -1,8 +1,8 @@
 <template>
-	<div class="v-upload">
+	<div class="c-upload">
 		<template>
 			<div @click="handleClick"
-				class="v-upload-trigger">
+				class="c-upload-trigger">
 				<slot></slot>
 			</div>
 			<input type="file"
@@ -15,20 +15,20 @@
 				ref="file">
 		</template>
 		<slot name="tip"></slot>
-		<ul class="v-upload-filelist"
+		<ul class="c-upload-filelist"
 			v-if="showFileList">
 			<li v-for="file of files"
 				:key="file.uid">
-				<span class="v-upload-filelist-filename">
-					<v-icon icon="picture"></v-icon>{{file.name}}
+				<span class="c-upload-filelist-filename">
+					<c-icon icon="picture"></c-icon>{{file.name}}
 				</span>
-				<v-icon :icon="file.status==='ready'?'loading':file.status==='loading'?'loading':file.status==='fail'?'minus-circle':'check-circle'"
+				<c-icon :icon="file.status==='ready'?'loading':file.status==='loading'?'loading':file.status==='fail'?'minus-circle':'check-circle'"
 					:class="{fail:file.status==='fail',success: file.status==='success',loading:
-                        ['ready','loading'].includes(file.status), 'v-icon-loading':['ready','loading'].includes(file.status)}"
-					class="v-upload-filelist-status"></v-icon>
-				<v-icon icon="close"
-					class="v-upload-filelist-close"
-					@click="deleteFile(file.uid)"></v-icon>
+                        ['ready','loading'].includes(file.status), 'c-icon-loading':['ready','loading'].includes(file.status)}"
+					class="c-upload-filelist-status"></c-icon>
+				<c-icon icon="close"
+					class="c-upload-filelist-close"
+					@click="deleteFile(file.uid)"></c-icon>
 			</li>
 		</ul>
 	</div>
@@ -37,7 +37,7 @@
 <script>
 import ajax from './ajax'
 export default {
-	name: 'v-upload',
+	name: 'c-upload',
 	props: {
 		name: String,
 		multiple: {
@@ -194,7 +194,7 @@ export default {
 
 <style lang="scss">
 @import '../../styles/_var';
-.v-upload {
+.c-upload {
 	&-trigger {
 		margin-bottom: 10px;
 	}
@@ -207,29 +207,29 @@ export default {
 			padding: 6px;
 			cursor: pointer;
 			transition: background-color 0.5s ease;
-			.v-icon.loading svg {
+			.c-icon.loading svg {
 				fill: $primary;
 			}
-			.v-icon.fail svg {
+			.c-icon.fail svg {
 				fill: $danger;
 			}
-			.v-icon.success svg {
+			.c-icon.success svg {
 				fill: $success;
 			}
-			.v-upload-filelist-close {
+			.c-upload-filelist-close {
 				display: none;
 			}
 			&:hover {
 				background-color: $level4-border;
-				.v-upload-filelist-close {
+				.c-upload-filelist-close {
 					display: block;
 				}
-				.v-upload-filelist-status {
+				.c-upload-filelist-status {
 					display: none;
 				}
 			}
 		}
-		&-filename .v-icon {
+		&-filename .c-icon {
 			margin-right: 5px;
 		}
 	}

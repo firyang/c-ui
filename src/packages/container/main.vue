@@ -1,17 +1,17 @@
 <template>
-	<div class="v-main">
+	<div class="c-main">
 		<slot></slot>
 	</div>
 </template>
 
 <script>
 export default {
-	name: 'v-main'
+	name: 'c-main'
 }
 </script>
 
 <style lang="scss">
-.v-main {
+.c-main {
 	flex: 1;
 }
 </style>

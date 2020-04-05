@@ -1,16 +1,16 @@
 <template>
-	<label class="v-radio"
+	<label class="c-radio"
 		:class="redioClass"
 		@click.prevent="handleClick">
-		<span class="v-radio-input">
-			<span class="v-radio-inner"></span>
+		<span class="c-radio-input">
+			<span class="c-radio-inner"></span>
 			<input type="radio"
 				v-model="model"
 				:disabled="disabled"
 				:name="name"
 				hidden />
 		</span>
-		<span class="v-radio-label"
+		<span class="c-radio-label"
 			v-if="hasLabel">
 			<slot></slot>
 		</span>
@@ -19,7 +19,7 @@
 
 <script>
 export default {
-	name: 'v-radio',
+	name: 'c-radio',
 	props: {
 		value: [String, Number, Boolean],
 		val: [String, Number, Boolean],
@@ -30,7 +30,7 @@ export default {
 		isGroup() {
 			let parent = this.$parent
 			while (parent) {
-				if (parent.$options.name !== 'v-radio-group') {
+				if (parent.$options.name !== 'c-radio-group') {
 					parent = parent.$parent
 				} else {
 					this._radioGroup = parent
@@ -47,7 +47,9 @@ export default {
 			}
 		},
 		isDisabled() {
-			return this.isGroup && this._radioGroup.disabled ? this._radioGroup.disabled : this.disabled
+			return this.isGroup && this._radioGroup.disabled
+				? this._radioGroup.disabled
+				: this.disabled
 		},
 		redioClass() {
 			let classes = []
@@ -75,7 +77,7 @@ export default {
 <style lang="scss">
 @import '../styles/_var';
 
-.v-radio {
+.c-radio {
 	cursor: pointer;
 	margin-right: 30px;
 	display: inline-flex;
@@ -96,7 +98,7 @@ export default {
 	}
 }
 .is-checked {
-	.v-radio-inner {
+	.c-radio-inner {
 		background: $primary;
 		border-color: $primary;
 		position: relative;
@@ -117,11 +119,11 @@ export default {
 .is-disabled {
 	color: $level1-border;
 	cursor: not-allowed;
-	.v-radio-inner {
+	.c-radio-inner {
 		border-color: $level2-border;
 	}
 	&.is-checked {
-		.v-radio-inner {
+		.c-radio-inner {
 			background-color: $level1-border;
 			border-color: $level1-border;
 		}

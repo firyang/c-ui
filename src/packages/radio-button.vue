@@ -1,5 +1,5 @@
 <template>
-	<label class="v-radio-button"
+	<label class="c-radio-button"
 		:class="radioClass"
 		@click.prevent="handleClick">
 		<input type="radio"
@@ -7,7 +7,7 @@
 			:disabled="disabled"
 			:name="name"
 			hidden />
-		<span class="v-radio-button-label">
+		<span class="c-radio-button-label">
 			<slot v-if=" hasLabel"></slot>
 			<span v-else>{{val}}</span>
 		</span>
@@ -16,7 +16,7 @@
 
 <script>
 export default {
-	name: 'v-radio-button',
+	name: 'c-radio-button',
 	props: {
 		val: [String, Number],
 		disabled: Boolean,
@@ -31,7 +31,7 @@ export default {
 		isGroup() {
 			let parent = this.$parent
 			while (parent) {
-				if (parent.$options.name !== 'v-radio-group') {
+				if (parent.$options.name !== 'c-radio-group') {
 					parent = parent.$parent
 				} else {
 					this._radioGroup = parent
@@ -56,7 +56,7 @@ export default {
 			let classes = []
 			if (this.model === this.val) classes.push('is-checked')
 			this.isDisabled && classes.push('is-disabled')
-			this.size && classes.push(`v-radio-button-${this.size}`)
+			this.size && classes.push(`c-radio-button-${this.size}`)
 			return classes
 		},
 		hasLabel() {
@@ -78,7 +78,7 @@ export default {
 <style lang="scss">
 @import '../styles/_var';
 
-.v-radio-button {
+.c-radio-button {
 	cursor: pointer;
 	display: inline-flex;
 	vertical-align: middle;

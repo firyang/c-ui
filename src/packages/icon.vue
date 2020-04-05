@@ -1,5 +1,5 @@
 <template>
-	<i class="v-icon"
+	<i class="c-icon"
 		@click="$emit('click',$event)">
 		<svg class="icon"
 			aria-hidden="true">
@@ -11,7 +11,7 @@
 <script>
 import '../styles/icon'
 export default {
-	name: 'v-icon',
+	name: 'c-icon',
 	props: {
 		icon: String
 	}

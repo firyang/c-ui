@@ -1,28 +1,28 @@
 <template>
-	<div class="v-time-line"
+	<div class="c-time-line"
 		ref="timeline">
-		<v-icon icon="left"
+		<c-icon icon="left"
 			v-if="width>containerWidth"
-			@click.prevent="move(1)"></v-icon>
-		<canvas id="v-time-line-cvs1"
+			@click.prevent="move(1)"></c-icon>
+		<canvas ref="c-time-line-cvs1"
 			:width="canvasWidth"
 			:height="height"></canvas>
-		<canvas id="v-time-line-cvs2"
+		<canvas ref="c-time-line-cvs2"
 			:width="canvasWidth"
 			:height="height"
 			@mousemove.prevent="handlemousemove($event)"
 			@mouseleave.prevent="handleMouseleave($event)"
 			@mousewheel.prevent="handleMousewheel($event)"
 			@click.prevent="handleClick($event)"></canvas>
-		<v-icon icon="right"
+		<c-icon icon="right"
 			v-if="width>containerWidth"
-			@click.prevent="move(-1)"></v-icon>
+			@click.prevent="move(-1)"></c-icon>
 	</div>
 </template>
 
 <script>
 export default {
-	name: 'v-time-line',
+	name: 'c-time-line',
 	props: {
 		timeList: {
 			type: Array,
@@ -146,8 +146,8 @@ export default {
 	methods: {
 		// 初始化固定参数
 		init_() {
-			this.cvs1 = document.getElementById('v-time-line-cvs1')
-			this.cvs2 = document.getElementById('v-time-line-cvs2')
+			this.cvs1 = this.$refs['c-time-line-cvs1']
+			this.cvs2 = this.$refs['c-time-line-cvs2']
 			this.ctx1 = this.cvs1.getContext('2d')
 			this.ctx2 = this.cvs2.getContext('2d')
 			this.containerWidth = this.$refs.timeline.clientWidth
@@ -361,13 +361,13 @@ export default {
 </script>
 
 <style lang="scss">
-.v-time-line {
+.c-time-line {
 	width: 100%;
 	height: 60px;
 	position: relative;
 	overflow: hidden;
 	background: #252526;
-	.v-icon {
+	.c-icon {
 		position: absolute;
 		top: 50%;
 		transform: translateY(-50%);
@@ -388,12 +388,11 @@ export default {
 			right: 5px;
 		}
 	}
-}
-#v-time-line-cvs1,
-#v-time-line-cvs2 {
-	position: absolute;
-	top: 0;
-	left: 50%;
-	transform: translateX(-50%);
+	canvas {
+		position: absolute;
+		top: 0;
+		left: 50%;
+		transform: translateX(-50%);
+	}
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-	<div class="v-row"
+	<div class="c-row"
 		:style="rowStyle">
 		<slot></slot>
 	</div>
@@ -7,8 +7,8 @@
 
 <script>
 export default {
-	name: 'v-row',
-	componentName: 'v-row',
+	name: 'c-row',
+	componentName: 'c-row',
 	props: {
 		gutter: {
 			type: Number,
@@ -18,8 +18,25 @@ export default {
 			type: String,
 			default: 'start',
 			validator(type) {
-				if (type && !['start', 'end', 'center', 'space-around', 'space-between'].includes(type)) {
-					console.error(`justify 属性必须为：${['start', 'end', 'center', 'space-around', 'space-between'].join('、')}`)
+				if (
+					type &&
+					![
+						'start',
+						'end',
+						'center',
+						'space-around',
+						'space-between'
+					].includes(type)
+				) {
+					console.error(
+						`justify 属性必须为：${[
+							'start',
+							'end',
+							'center',
+							'space-around',
+							'space-between'
+						].join('、')}`
+					)
 				}
 				return true
 			}
@@ -46,7 +63,13 @@ export default {
 				}
 			}
 			if (this.justify) {
-				let key = ['start', 'end', 'center', 'space-around', 'space-between'].includes(this.justify)
+				let key = [
+					'start',
+					'end',
+					'center',
+					'space-around',
+					'space-between'
+				].includes(this.justify)
 					? 'flex-' + this.justify
 					: this.justify
 				style = {
@@ -55,7 +78,12 @@ export default {
 				}
 			}
 			if (this.align) {
-				let key = this.align === 'middle' ? 'center' : this.align === 'bottom' ? 'flex-end' : undefined
+				let key =
+					this.align === 'middle'
+						? 'center'
+						: this.align === 'bottom'
+						? 'flex-end'
+						: undefined
 				style = {
 					...style,
 					alignItems: key
@@ -73,7 +101,7 @@ export default {
 </script>
 
 <style lang="scss">
-.v-row {
+.c-row {
 	display: flex;
 	overflow: hidden;
 	flex-wrap: wrap;

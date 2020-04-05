@@ -2,23 +2,23 @@
 	<div id="app">
 		<!-- upload -->
 		<div class="time-line">
-			<v-time-line :time-list="timeList"
+			<c-time-line :time-list="timeList"
 				:scale-value="20"
 				:space-num="4"
-				@click="getValue"></v-time-line>
+				@click="getValue"></c-time-line>
 			<br>
 			<button @click="changeTime">click</button>
 		</div>
 		<div v-if="false">
-			<v-upload name="myUpload"
+			<c-upload name="myUpload"
 				accept="image/jpeg"
 				action="http://localhost:3000/upload"
 				:file-list="fileList"
 				multiple>
-				<v-button type="primary"
-					size="small">点击上传</v-button>
+				<c-button type="primary"
+					size="small">点击上传</c-button>
 				<p slot="tip">只能上传jpg/png文件，且不超过500kb</p>
-			</v-upload>
+			</c-upload>
 		</div>
 	</div>
 </template>

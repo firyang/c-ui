@@ -1,5 +1,5 @@
 <template>
-	<aside class="v-aside"
+	<aside class="c-aside"
 		:style="{width}">
 		<slot></slot>
 	</aside>
@@ -7,7 +7,7 @@
 
 <script>
 export default {
-	name: 'v-aside',
+	name: 'c-aside',
 	props: {
 		width: {
 			type: String,

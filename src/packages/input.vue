@@ -17,30 +17,30 @@
 			:cols="cols"
 			@blur="$emit('blur',$event)"
 			@focus="$emit('focus',$event)"></textarea>
-		<v-icon icon="close-circle"
+		<c-icon icon="close-circle"
 			v-if="showClear"
 			@focus.prevent
 			@click="handleClear"
 			@mousedown.native.prevent
-			class="v-input-clear" /> <!-- @mousedown.native.prevent  不会失去焦点 -->
-		<v-icon icon="eye"
+			class="c-input-clear" /> <!-- @mousedown.native.prevent  不会失去焦点 -->
+		<c-icon icon="eye"
 			v-if="elType!=='textarea'&&showPassword&&model"
 			@click="handleShowPassword"
 			@mousedown.native.prevent
-			class="v-input-eye" />
-		<v-icon v-if="elType!=='textarea'&&prefixIcon"
+			class="c-input-eye" />
+		<c-icon v-if="elType!=='textarea'&&prefixIcon"
 			:icon="prefixIcon"
-			class="v-prefix-icon"
+			class="c-prefix-icon"
 			@click="$emit('iconclick',$event)" />
-		<v-icon v-if="elType!=='textarea' && suffixIcon"
+		<c-icon v-if="elType!=='textarea' && suffixIcon"
 			:icon="suffixIcon"
-			class="v-suffix-icon"
+			class="c-suffix-icon"
 			@click="$emit('iconclick',$event)" />
-		<span class="v-prefix-slot"
+		<span class="c-prefix-slot"
 			v-if="elType!=='textarea'&&$slots&&$slots.prefix">
 			<slot name="prefix"></slot>
 		</span>
-		<span class="v-suffix-slot"
+		<span class="c-suffix-slot"
 			v-if="elType!=='textarea'&&$slots&&$slots.suffix">
 			<slot name="suffix"></slot>
 		</span>
@@ -49,7 +49,7 @@
 
 <script>
 export default {
-	name: 'v-input',
+	name: 'c-input',
 	props: {
 		type: {
 			type: String,
@@ -76,16 +76,16 @@ export default {
 		inputClass() {
 			let classes = []
 			this.type === 'textarea'
-				? classes.push('v-textarea')
-				: classes.push('v-input')
-			this.disabled && classes.push('v-input-disabled')
+				? classes.push('c-textarea')
+				: classes.push('cv-input')
+			this.disabled && classes.push('c-input-disabled')
 			;(this.prefixIcon || (this.$slots && this.$slots.prefix)) &&
-				classes.push('v-input-prefix-icon')
+				classes.push('c-input-prefix-icon')
 			;(this.suffixIcon || (this.$slots && this.$slots.suffix)) &&
-				classes.push('v-input-suffix-icon')
+				classes.push('c-input-suffix-icon')
 			this.size &&
 				this.type !== 'textarea' &&
-				classes.push(`v-input-${this.size}`)
+				classes.push(`c-input-${this.size}`)
 			return classes
 		},
 		model: {
@@ -119,7 +119,7 @@ export default {
 
 <style lang="scss">
 @import '../styles/_var';
-.v-input {
+.c-input {
 	display: inline-flex;
 	align-items: center;
 	vertical-align: middle;
@@ -145,7 +145,7 @@ export default {
 		input {
 			padding-left: 35px;
 		}
-		.v-prefix-slot {
+		.c-prefix-slot {
 			position: absolute;
 			left: 12px;
 		}
@@ -154,25 +154,25 @@ export default {
 		input {
 			padding-right: 35px;
 		}
-		.v-suffix-slot {
+		.c-suffix-slot {
 			position: absolute;
 			right: 12px;
 		}
 	}
-	.v-icon {
+	.c-icon {
 		color: $placeholder-font;
 		cursor: pointer;
 		:hover {
 			color: $minor-font;
 		}
 	}
-	.v-icon.v-prefix-icon {
+	.c-icon.c-prefix-icon {
 		position: absolute;
 		left: 12px;
 	}
-	.v-icon.v-suffix-icon,
-	.v-icon.v-input-clear,
-	.v-icon.v-input-eye {
+	.c-icon.c-suffix-icon,
+	.c-icon.c-input-clear,
+	.c-icon.c-input-eye {
 		position: absolute;
 		right: 12px;
 	}
@@ -192,7 +192,7 @@ export default {
 		}
 	}
 }
-.v-textarea {
+.c-textarea {
 	display: inline-flex;
 	vertical-align: middle;
 	position: relative;
@@ -212,7 +212,7 @@ export default {
 		}
 	}
 }
-.v-input-disabled {
+.c-input-disabled {
 	input,
 	textarea {
 		cursor: not-allowed;

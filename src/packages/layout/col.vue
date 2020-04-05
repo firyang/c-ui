@@ -1,5 +1,5 @@
 <template>
-	<div class="v-col"
+	<div class="c-col"
 		:class="colClass"
 		:style="colStyle">
 		<slot></slot>
@@ -8,7 +8,7 @@
 
 <script>
 export default {
-	name: 'v-col',
+	name: 'c-col',
 	data() {
 		return {
 			gutter: 0
@@ -50,24 +50,24 @@ export default {
 	computed: {
 		colClass() {
 			let classes = []
-			classes.push(`v-col-${this.span}`)
+			classes.push(`c-col-${this.span}`)
 			if (this.offset) {
-				classes.push(`v-col-offset-${this.offset}`)
+				classes.push(`c-col-offset-${this.offset}`)
 			}
 			if (this.push) {
-				classes.push(`v-col-push-${this.push}`)
+				classes.push(`c-col-push-${this.push}`)
 			}
 			if (this.pull) {
-				classes.push(`v-col-pull-${this.pull}`)
+				classes.push(`c-col-pull-${this.pull}`)
 			}
 			;['xs', 'sm', 'md', 'lg', 'xl'].forEach(prop => {
 				if (this[prop]) {
 					if (typeof this[prop] === 'number') {
-						classes.push(`v-col-${prop}-${this[prop]}`)
+						classes.push(`c-col-${prop}-${this[prop]}`)
 					} else {
 						const { span, offset } = this[prop]
-						classes.push(`v-col-${prop}-${span}`)
-						classes.push(`v-col-${prop}-offset${offset}`)
+						classes.push(`c-col-${prop}-${span}`)
+						classes.push(`c-col-${prop}-offset${offset}`)
 					}
 				}
 			})
@@ -89,23 +89,23 @@ export default {
 </script>
 
 <style lang="scss">
-.v-col {
+.c-col {
 	position: relative;
 }
 @import '@/styles/_var.scss';
 
 @for $i from 1 through 24 {
-	.v-col-#{$i} {
+	.c-col-#{$i} {
 		width: $i/24 * 100%;
 	}
-	.v-col-offset-#{$i} {
+	.c-col-offset-#{$i} {
 		margin-left: $i/24 * 100% +'px';
 	}
-	.v-col-push-#{$i} {
+	.c-col-push-#{$i} {
 		left: $i/24 * 100%;
 		z-index: 1;
 	}
-	.v-col-pull-#{$i} {
+	.c-col-pull-#{$i} {
 		right: $i/24 * 100%;
 	}
 }
@@ -116,10 +116,10 @@ $props: ('xs', 'sm', 'md', 'lg', 'xl');
 	$prop: nth($props, $i);
 	@include res($prop) {
 		@for $i from 1 through 24 {
-			.v-col-#{$prop}-#{$i} {
+			.c-col-#{$prop}-#{$i} {
 				width: $i/24 * 100%;
 			}
-			.v-col-#{$prop}-offset-#{$i} {
+			.c-col-#{$prop}-offset-#{$i} {
 				margin-left: $i/24 * 100%;
 			}
 		}
