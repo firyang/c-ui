@@ -7,7 +7,8 @@
 			:disabled="disabled"
 			@blur="$emit('blur',$event)"
 			@focus="$emit('focus',$event)"
-			ref="input">
+			ref="input"
+			:style="{paddingRight: showClear||showPassword ? '32px': '15px'}">
 		<textarea v-else
 			:type="type"
 			v-model="model"
@@ -20,12 +21,12 @@
 		<c-icon icon="close-circle"
 			v-if="showClear"
 			@focus.prevent
-			@click="handleClear"
+			@click.stop="handleClear"
 			@mousedown.native.prevent
 			class="c-input-clear" /> <!-- @mousedown.native.prevent  不会失去焦点 -->
 		<c-icon icon="eye"
 			v-if="elType!=='textarea'&&showPassword&&model"
-			@click="handleShowPassword"
+			@click.stop="handleShowPassword"
 			@mousedown.native.prevent
 			class="c-input-eye" />
 		<c-icon v-if="elType!=='textarea'&&prefixIcon"
@@ -77,7 +78,7 @@ export default {
 			let classes = []
 			this.type === 'textarea'
 				? classes.push('c-textarea')
-				: classes.push('cv-input')
+				: classes.push('c-input')
 			this.disabled && classes.push('c-input-disabled')
 			;(this.prefixIcon || (this.$slots && this.$slots.prefix)) &&
 				classes.push('c-input-prefix-icon')
@@ -126,13 +127,13 @@ export default {
 	position: relative;
 	input {
 		width: 180px;
-		height: 42px;
+		height: 40px;
 		border-width: 1px;
 		border-style: solid;
 		border-color: $level1-border;
 		border-radius: $border-radius;
 		outline: none;
-		padding: 0 15px;
+		padding: 0 10px;
 		cursor: pointer;
 		&:hover {
 			border-color: $placeholder-font;
@@ -143,20 +144,20 @@ export default {
 	}
 	&-prefix-icon {
 		input {
-			padding-left: 35px;
+			padding-left: 32px;
 		}
 		.c-prefix-slot {
 			position: absolute;
-			left: 12px;
+			left: 10px;
 		}
 	}
 	&-suffix-icon {
 		input {
-			padding-right: 35px;
+			padding-right: 32px;
 		}
 		.c-suffix-slot {
 			position: absolute;
-			right: 12px;
+			right: 10px;
 		}
 	}
 	.c-icon {
@@ -168,13 +169,13 @@ export default {
 	}
 	.c-icon.c-prefix-icon {
 		position: absolute;
-		left: 12px;
+		left: 10px;
 	}
 	.c-icon.c-suffix-icon,
 	.c-icon.c-input-clear,
 	.c-icon.c-input-eye {
 		position: absolute;
-		right: 12px;
+		right: 10px;
 	}
 	&-medium {
 		input {

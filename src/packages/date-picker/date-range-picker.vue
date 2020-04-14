@@ -1,14 +1,14 @@
 <template>
-	<div class="c-xxx"></div>
+	<div class="c-date-range-picker"></div>
 </template>
 
 <script>
 export default {
-	name: 'c-xxx'
+	name: 'c-date-range-picker'
 }
 </script>
 
 <style lang="scss">
-.c-xxx {
+.c-date-range-picker {
 }
 </style>

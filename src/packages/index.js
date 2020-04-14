@@ -14,6 +14,8 @@ import Aside from './container/aside'
 import Footer from './container/footer'
 import Upload from './upload/upload'
 import TimeLine from './time-line'
+import DatePicker from './date-picker/date-picker'
+import Popover from './popover'
 
 const install = Vue => {
     Vue.component(Icon.name, Icon)
@@ -32,6 +34,8 @@ const install = Vue => {
     Vue.component(Footer.name, Footer)
     Vue.component(Upload.name, Upload)
     Vue.component(TimeLine.name, TimeLine)
+    Vue.component(DatePicker.name, DatePicker)
+    Vue.component(Popover.name, Popover)
 }
 
 export default install
