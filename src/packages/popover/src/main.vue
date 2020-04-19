@@ -24,7 +24,7 @@ const on = (element, event, handler) => {
 }
 
 const off = (element, event, handler) => {
-	element.romveEventListener(event, handler, false)
+	element.removeEventListener(event, handler, false)
 }
 
 const isScrollElement = el => {
@@ -82,6 +82,9 @@ export default {
 		visible(value) {
 			if (value && !this.isManual) {
 				this.displayPop()
+				this.$emit('show', value)
+			} else {
+				this.$emit('hide', value)
 			}
 		},
 		value: {
@@ -315,13 +318,13 @@ export default {
 	mounted() {
 		this.init()
 	},
-	beforeDestroy() {
+	destroyed() {
 		off(this.reference, 'click', this.toggle)
 		!this.isManual && off(document, 'click', this.handleDocumentClick)
-		off(this.$el, 'mouseenter', this.handleMouseenter)
-		off(this.$el, 'mouseleave', this.handleMouseleave)
-		off(this.popover, 'mouseenter', this.handleMouseenter)
-		off(this.popover, 'mouseleave', this.handleMouseleave)
+		this.trigger === 'hover' && off(this.$el, 'mouseenter', this.handleMouseenter)
+		this.trigger === 'hover' && off(this.$el, 'mouseleave', this.handleMouseleave)
+		this.popover && off(this.popover, 'mouseenter', this.handleMouseenter)
+		this.popover && off(this.popover, 'mouseleave', this.handleMouseleave)
 		this.isScroll && off(document, 'scroll', this.handleScroll)
 	}
 }
@@ -341,6 +344,7 @@ export default {
 	box-shadow: 1px 0 12px 0 $level4-border, 0 1px 12px 0 $level4-border;
 	background: $basic-white;
 	position: absolute;
+	top: -1000px;
 	z-index: 9;
 	h4 {
 		margin-bottom: 5px;
