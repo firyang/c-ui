@@ -56,43 +56,47 @@ const getElementRect = el => {
 export default {
 	name: 'c-popover',
 	props: {
-		value: { default: false, type: Boolean },
+		value: { type: Boolean, default: undefined },
 		title: String,
 		content: String,
 		width: [String, Number],
 		placement: { type: String, default: 'top' },
 		trigger: { type: String, default: 'click' },
 		showArrow: { type: Boolean, default: true },
-		scrollHide: { type: Boolean, default: true }
+		scrollHide: { type: Boolean, default: false },
+		autofix: { type: Boolean, default: false }
 	},
 	data() {
 		return {
 			visible: false,
 			position: '',
 			arrowStyle: [],
-			popStyle: {}
+			popStyle: {},
+			popover: null,
+			rootElmRect: '',
+			popRect: '',
+			refRect: ''
 		}
 	},
 	watch: {
 		visible(value) {
-			this.$emit('input', value)
+			if (value && !this.isManual) {
+				this.displayPop()
+			}
 		},
 		value: {
 			immediate: true,
 			handler(value) {
 				this.visible = value
 				if (value) {
-					this.$nextTick(() => {
-						this.popover = this.$refs.popover
-						document.body.appendChild(this.popover)
-						if (this.trigger === 'hover') {
-							on(this.popover, 'mouseenter', this.handleMouseenter)
-							on(this.popover, 'mouseleave', this.handleMouseleave)
-						}
-						this.positionPop()
-					})
+					this.displayPop()
 				}
 			}
+		}
+	},
+	computed: {
+		isManual() {
+			return this.value !== undefined
 		}
 	},
 	methods: {
@@ -104,7 +108,7 @@ export default {
 
 			if (this.trigger === 'click') {
 				on(this.reference, 'click', this.toggle)
-				on(document, 'click', this.handleDocumentClick)
+				!this.isManual && on(document, 'click', this.handleDocumentClick)
 			} else if (this.trigger === 'hover') {
 				on(this.$el, 'mouseenter', this.handleMouseenter)
 				on(this.$el, 'mouseleave', this.handleMouseleave)
@@ -121,7 +125,7 @@ export default {
 			const scrollTop = root.scrollTop
 			const scrollLeft = root.scrollLeft
 			const { w, h } = getElementRect(root)
-			this.rootRect = { w, h, scrollTop, scrollLeft, elm: root }
+			this.rootElmRect = { w, h, scrollTop, scrollLeft, elm: root }
 			this.refRect = getElementRect(this.reference)
 			this.vw = window.innerWidth
 			this.vh = window.innerHeight
@@ -130,8 +134,21 @@ export default {
 				on(document, 'scroll', this.handleScroll)
 			}
 		},
+		displayPop() {
+			this.$nextTick(() => {
+				this.popover = this.$refs.popover
+				document.body.appendChild(this.popover)
+				if (this.trigger === 'hover') {
+					on(this.popover, 'mouseenter', this.handleMouseenter)
+					on(this.popover, 'mouseleave', this.handleMouseleave)
+				}
+				this.positionPop()
+			})
+		},
 		toggle() {
-			this.visible = !this.visible
+			if (!this.isManual) {
+				this.visible = !this.visible
+			}
 		},
 		handleDocumentClick(e) {
 			if (!this.$el.contains(e.target)) {
@@ -139,83 +156,160 @@ export default {
 			}
 		},
 		handleMouseenter() {
-			clearTimeout(this.timer)
-			this.visible = true
+			if (!this.isManual) {
+				clearTimeout(this.timer)
+				this.visible = true
+			}
 		},
 		handleMouseleave() {
-			this.timer = setTimeout(() => {
-				this.visible = false
-			}, 200)
+			if (!this.isManual) {
+				this.timer = setTimeout(() => {
+					this.visible = false
+				}, 200)
+			}
 		},
-		handleScroll() {
+		handleScroll(e) {
 			this.scrollHide && (this.visible = false)
+
+			const rootScrollObj = {
+				scrollTop: this.rootElmRect.elm.scrollTop,
+				scrollLeft: this.rootElmRect.elm.scrollLeft
+			}
+
+			this.rootElmRect = { ...this.rootElmRect, ...rootScrollObj }
+
+			if (this.visible && this.autofix && !this.scrollHide && !this.isManual) {
+				const pos = this.validPos(this.pos, this.position)
+				this.updatePopStyle(pos)
+			}
 		},
 		positionPop() {
 			setTimeout(() => {
-				const vw = this.vw
-				const vh = this.vh
-				const { w: rootW, h: rootH, scrollTop, scrollLeft } = this.rootRect
-				const popRect = getElementRect(this.popover)
-				const { w: popW, h: popH } = popRect
-				const { x, y, w, h } = this.refRect
-				let top, left
-				switch (this.placement) {
-					case 'bottom':
-						left = x - (popW - w) / 2
-						top = y + h + 12
-						break
-					case 'bottom-right':
-						left = x
-						top = y + h + 12
-						break
-					case 'bottom-left':
-						left = x - (popW - w)
-						top = y + h + 12
-						break
-					case 'top':
-						left = x - (popW - w) / 2
-						top = y - popH - 12
-						break
-					case 'top-right':
-						left = x
-						top = y - popH - 12
-						break
-					case 'top-left':
-						left = x - (popW - w)
-						top = y - popH - 12
-						break
-					case 'left':
-						top = y - (popH - h) / 2
-						left = x - popW - 12
-						break
-					case 'left-top':
-						top = y - (popH - h)
-						left = x - popW - 12
-						break
-					case 'left-bottom':
-						top = y
-						left = x - popW - 12
-						break
-					case 'right':
-						top = y - (popH - h) / 2
-						left = x + w + 12
-						break
-					case 'right-top':
-						top = y - (popH - h)
-						left = x + w + 12
-						break
-					case 'right-bottom':
-						top = y
-						left = x + w + 12
-						break
+				let pos
+				if (!this.pos) {
+					pos = this.pos = this.calcPos()
+					this._pos = pos
+				} else {
+					pos = this.pos
 				}
 
-				const styles = {
-					top: top + 'px',
-					left: left + 'px'
+				if (this.autofix && !this.scrollHide) {
+					pos = this.validPos(pos, this.position)
 				}
-				this.popStyle = { ...this.popStyle, ...styles }
+
+				this.pos = pos
+
+				this.updatePopStyle(pos)
 			}, 50)
+		},
+		calcPos(placement = this.placement) {
+			let popRect = this.popRect
+			if (!popRect) {
+				popRect = this.popRect = getElementRect(this.popover)
+			}
+
+			const { w: popW, h: popH } = popRect
+			const { x, y, w, h } = this.refRect
+			let top, left
+			switch (placement) {
+				case 'bottom':
+					left = x - (popW - w) / 2
+					top = y + h + 12
+					break
+				case 'bottom-right':
+					left = x
+					top = y + h + 12
+					break
+				case 'bottom-left':
+					left = x - (popW - w)
+					top = y + h + 12
+					break
+				case 'top':
+					left = x - (popW - w) / 2
+					top = y - popH - 12
+					break
+				case 'top-right':
+					left = x
+					top = y - popH - 12
+					break
+				case 'top-left':
+					left = x - (popW - w)
+					top = y - popH - 12
+					break
+				case 'left':
+					top = y - (popH - h) / 2
+					left = x - popW - 12
+					break
+				case 'left-top':
+					top = y - (popH - h)
+					left = x - popW - 12
+					break
+				case 'left-bottom':
+					top = y
+					left = x - popW - 12
+					break
+				case 'right':
+					top = y - (popH - h) / 2
+					left = x + w + 12
+					break
+				case 'right-top':
+					top = y - (popH - h)
+					left = x + w + 12
+					break
+				case 'right-bottom':
+					top = y
+					left = x + w + 12
+					break
+			}
+
+			return { left, top }
+		},
+		validPos(pos, placement) {
+			const oldPlacement = this.placement
+			const { isOver, position } = this.checkLimit(oldPlacement, this._pos)
+			if (!isOver) {
+				this.position = oldPlacement
+				pos = this._pos
+			} else {
+				this.position = position
+				pos = this.pos = this.calcPos(this.position)
+			}
+
+			return pos
+		},
+		checkLimit(placement, pos) {
+			const vw = this.vw
+			const vh = this.vh
+			const { scrollTop, scrollLeft } = this.rootElmRect
+			const { w, h } = this.popRect
+			const { top, left } = pos
+			const limitOptions = {
+				top: { isOver: top - scrollTop < 0, key: 'bottom' },
+				bottom: { isOver: top + h - scrollTop > vh, key: 'top' },
+				left: { isOver: left - scrollLeft < 0, key: 'right' },
+				right: { isOver: left + w - scrollLeft > vw, key: 'left' }
+			}
+
+			let position,
+				isOver = false
+			let [key1, key2] = placement.split('-')
+
+			if (limitOptions[key1].isOver) {
+				key1 = limitOptions[key1].key
+				isOver = true
+			}
+			if (key2 && limitOptions[key2].isOver) {
+				key2 = limitOptions[key2].key
+				isOver = true
+			}
+
+			position = key2 ? [key1, key2].join('-') : key1
+			return { isOver, position }
+		},
+		updatePopStyle(pos) {
+			const { left, top } = pos
+			const styles = { top: `${top}px`, left: `${left}px` }
+			this.popStyle = { ...this.popStyle, ...styles }
 		}
 	},
 	mounted() {
@@ -223,7 +317,7 @@ export default {
 	},
 	beforeDestroy() {
 		off(this.reference, 'click', this.toggle)
-		off(document, 'click', this.handleDocumentClick)
+		!this.isManual && off(document, 'click', this.handleDocumentClick)
 		off(this.$el, 'mouseenter', this.handleMouseenter)
 		off(this.$el, 'mouseleave', this.handleMouseleave)
 		off(this.popover, 'mouseenter', this.handleMouseenter)

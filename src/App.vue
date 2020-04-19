@@ -1,20 +1,40 @@
 <template>
 	<div id="app">
-		<div style="height:550px;">top</div>
 		<div class="picker-container">
 			<c-date-picker placeholder="选择日期"
 				v-model="checkDate"></c-date-picker>
 		</div>
-		<div style="margin: 50px;display:flex;justify-content:center;">
-			<c-popover trigger="click"
+		<div class="container">
+			<c-popover trigger="hover"
 				title="提示信息"
-				content="这是一段提示信息，popover提示信息"
-				placement="left-bottom"
-				v-model="value">
-				<c-button slot="reference">click me</c-button>
+				content="这是一段提示信息，popover组件的提示信息"
+				placement="top-right">
+				<c-button slot="reference">hover 触发</c-button>
+			</c-popover>
+			<c-popover title="提示信息"
+				content="这是一段提示信息，popover组件的提示信息">
+				<c-button slot="reference">click 触发</c-button>
+			</c-popover>
+			<c-popover title="提示信息"
+				content="这是一段提示信息，popover组件的提示信息"
+				width="300px"
+				:autofix="true">
+				<c-button slot="reference">自适应位置</c-button>
+			</c-popover>
+			<c-popover title="提示信息"
+				content="这是一段提示信息，popover组件的提示信息"
+				placement="bottom-left"
+				:scroll-hide="true">
+				<c-button slot="reference">滚动页面自动隐藏</c-button>
+			</c-popover>
+			<c-popover title="提示信息"
+				content="这是一段提示信息，popover组件的提示信息"
+				placement="top-left"
+				v-model="value3">
+				<c-button slot="reference"
+					@click="value3=!value3">手动触发</c-button>
 			</c-popover>
 		</div>
-		<div style="height:800px;">bottom</div>
 		<!-- upload -->
 		<div v-if="false">
 			<div class="time-line">
@@ -49,7 +69,9 @@ export default {
 				{ begin_time: 1584637782000, end_time: 1584647361600 }
 			],
 			checkDate: '2020-3-5',
-			value: false
+			value1: false,
+			value2: false,
+			value3: false
 		}
 	},
 	methods: {
@@ -93,6 +115,11 @@ export default {
 }
 .picker-container {
 	display: flex;
-	justify-content: flex-end;
+	justify-content: center;
+	margin: 100px 0;
+}
+.container {
+	display: flex;
+	justify-content: space-around;
 }
 </style>
