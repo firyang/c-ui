@@ -136,6 +136,7 @@ export default {
 				this.isScroll = true
 				on(document, 'scroll', this.handleScroll)
 			}
+			on(window, 'resize', this.handleResize)
 		},
 		displayPop() {
 			this.$nextTick(() => {
@@ -184,6 +185,24 @@ export default {
 			if (this.visible && this.autofix && !this.scrollHide && !this.isManual) {
 				const pos = this.validPos(this.pos, this.position)
 				this.updatePopStyle(pos)
+			}
+		},
+		handleResize(e) {
+			const rootElem = this.rootElmRect.elm
+			const { w, h } = getElementRect(rootElem)
+
+			this.rootElmRect = { ...this.rootElmRect, w, h }
+			this.refRect = getElementRect(this.reference)
+
+			if (this.pos) {
+				this.pos = undefined
+				this._pos = undefined
+			}
+
+			if (this.visible) {
+				this.positionPop()
+			} else {
+				this.updatePopStyle()
 			}
 		},
 		positionPop() {
@@ -310,6 +329,10 @@ export default {
 			return { isOver, position }
 		},
 		updatePopStyle(pos) {
+			if (!pos) {
+				this.popStyle.top = '-1000px'
+				return
+			}
 			const { left, top } = pos
 			const styles = { top: `${top}px`, left: `${left}px` }
 			this.popStyle = { ...this.popStyle, ...styles }
@@ -326,6 +349,8 @@ export default {
 		this.popover && off(this.popover, 'mouseenter', this.handleMouseenter)
 		this.popover && off(this.popover, 'mouseleave', this.handleMouseleave)
 		this.isScroll && off(document, 'scroll', this.handleScroll)
+		off(window, 'resize', this.handleResize)
+		this.visible && this.popover && document.body.removeChild(this.popover)
 	}
 }
 </script>
@@ -495,16 +520,15 @@ export default {
 }
 /* transition */
 .popover-slide-fade-enter-active {
-	height: auto;
-	transition: height 0.3s;
+	opacity: 1;
+	transition: opacity 0.5s;
 }
 .popover-slide-fade-leave-active {
-	height: auto;
-	transition: height 0.1s;
+	opacity: 1;
+	transition: opacity 0.2s;
 }
 .popover-slide-fade-enter,
 .popover-slide-fade-leave-to {
-	height: 0;
 	opacity: 0;
 }
 </style>

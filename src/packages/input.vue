@@ -8,7 +8,7 @@
 			@blur="$emit('blur',$event)"
 			@focus="$emit('focus',$event)"
 			ref="input"
-			:style="{paddingRight: showClear||showPassword ? '32px': '15px'}">
+			:style="{paddingRight: clearable||showPassword ? '32px': '15px'}">
 		<textarea v-else
 			:type="type"
 			v-model="model"
@@ -76,17 +76,11 @@ export default {
 	computed: {
 		inputClass() {
 			let classes = []
-			this.type === 'textarea'
-				? classes.push('c-textarea')
-				: classes.push('c-input')
+			this.type === 'textarea' ? classes.push('c-textarea') : classes.push('c-input')
 			this.disabled && classes.push('c-input-disabled')
-			;(this.prefixIcon || (this.$slots && this.$slots.prefix)) &&
-				classes.push('c-input-prefix-icon')
-			;(this.suffixIcon || (this.$slots && this.$slots.suffix)) &&
-				classes.push('c-input-suffix-icon')
-			this.size &&
-				this.type !== 'textarea' &&
-				classes.push(`c-input-${this.size}`)
+			;(this.prefixIcon || (this.$slots && this.$slots.prefix)) && classes.push('c-input-prefix-icon')
+			;(this.suffixIcon || (this.$slots && this.$slots.suffix)) && classes.push('c-input-suffix-icon')
+			this.size && this.type !== 'textarea' && classes.push(`c-input-${this.size}`)
 			return classes
 		},
 		model: {
