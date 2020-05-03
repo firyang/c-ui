@@ -4,6 +4,7 @@
 			<c-date-picker placeholder="选择日期"
 				v-model="checkDate"></c-date-picker>
 		</div>
+		<div>{{checkDate}}</div>
 		<div class="container">
 			<c-popover trigger="hover"
 				title="提示信息"
@@ -68,7 +69,7 @@ export default {
 				{ begin_time: 1584708272114, end_time: 1584719908754 },
 				{ begin_time: 1584637782000, end_time: 1584647361600 }
 			],
-			checkDate: '2020-3-5',
+			checkDate: '',
 			value1: false,
 			value2: false,
 			value3: false
