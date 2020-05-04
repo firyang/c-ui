@@ -4,10 +4,10 @@
 			v-model="model"
 			:type="type"
 			:format="format"
-			:valueFormat="valueFormat"
-			:startPlaceholder="startPlaceholder"
-			:endPlaceholder="endPlaceholder"
-			:unlink="unlink"></date-range-picker>
+			:value-format="valueFormat"
+			:start-placeholder="startPlaceholder"
+			:end-placeholder="endPlaceholder"
+			:unlink-panels="unlinkPanels"></date-range-picker>
 		<c-popover v-else
 			placement="bottom-right"
 			:autofix="true"
@@ -23,6 +23,7 @@
 					slot="prefix"></c-icon>
 			</c-input>
 			<date-picker-panel v-model="model"
+				:type="type"
 				@change="change"></date-picker-panel>
 		</c-popover>
 	</div>
@@ -32,6 +33,12 @@
 import DatePickerPanel from './date-picker-panel'
 import DateRangePicker from './date-range-picker'
 
+const defaultFormat = {
+	year: 'yyyy',
+	month: 'yyyy-MM',
+	date: 'yyyy-MM-dd'
+}
+
 export default {
 	name: 'c-date-picker',
 	components: {
@@ -40,13 +47,13 @@ export default {
 	},
 	props: {
 		value: [String, Array, Date],
-		type: { type: String, default: 'daterange' },
-		format: { type: String, default: 'yyyy-MM-dd' },
+		type: { type: String, default: 'date' },
+		format: String,
 		valueFormat: String,
 		placeholder: String,
 		startPlaceholder: { type: String, default: '开始日期' },
 		endPlaceholder: { type: String, default: '结束日期' },
-		unlink: { type: Boolean, default: false }
+		unlinkPanels: { type: Boolean, default: false }
 	},
 	data() {
 		return {
@@ -87,7 +94,17 @@ export default {
 			const y = date.getFullYear()
 			const m = date.getMonth() + 1
 			const d = date.getDate()
-			return `${y}-${('0' + m).slice(-2)}-${('0' + d).slice(-2)}`
+			let str
+			if (this.type.includes('date')) {
+				str = `${y}-${('0' + m).slice(-2)}-${('0' + d).slice(-2)}`
+			}
+			if (this.type.includes('month')) {
+				str = `${y}-${('0' + m).slice(-2)}`
+			}
+			if (this.type.includes('year')) {
+				str = `${y}`
+			}
+			return str
 		},
 		clear() {
 			this.model = ''
@@ -98,7 +115,6 @@ export default {
 
 <style lang="scss">
 .c-date-picker {
-	width: 220px;
 	height: 40px;
 	.c-input,
 	.c-input input {

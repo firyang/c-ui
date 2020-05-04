@@ -3,6 +3,7 @@
 		:autofix="true"
 		width="auto"
 		@show="show"
+		@hide="hide"
 		ref="date-picker-popover">
 		<div slot="reference"
 			class="date-range-input">
@@ -18,18 +19,17 @@
 				@click.stop.prevent="clear"></c-icon>
 		</div>
 		<div class="c-picker-popper">
-			<c-picker-panel v-model="start"
-				:origin-value="model"
+			<c-picker-panel v-model="startValue"
+				:range-picked="model"
 				:type="type"
-				:unlink="unlink"
+				:unlink-panels="unlinkPanels"
 				pick-type="start"
 				@change="startChange"></c-picker-panel>
-			<c-picker-panel v-model="end"
-				:origin-value="model"
+			<c-picker-panel v-model="endValue"
+				:range-picked="model"
 				:type="type"
-				:unlink="unlink"
+				:unlink-panels="unlinkPanels"
 				pick-type="end"
-				ref="endPicker"
 				@change="endChange"></c-picker-panel>
 		</div>
 	</c-popover>
@@ -37,6 +37,11 @@
 
 <script>
 import DatePickerPanel from './date-picker-panel'
+
+const defaultFormat = {
+	month: 'yyyy-MM',
+	date: 'yyyy-MM-dd'
+}
 const tempDate = []
 
 export default {
@@ -46,16 +51,18 @@ export default {
 	props: {
 		value: [String, Array],
 		type: String,
-		format: { type: String, default: 'yyyy-MM-dd' },
+		format: String,
 		valueFormat: String,
 		startPlaceholder: { type: String, default: '开始日期' },
 		endPlaceholder: { type: String, default: '结束日期' },
-		unlink: { type: Boolean, default: false }
+		unlinkPanels: { type: Boolean, default: false }
 	},
 	data() {
 		return {
 			start: '',
 			end: '',
+			startValue: '',
+			endValue: '',
 			pickCount: 0
 		}
 	},
@@ -77,19 +84,18 @@ export default {
 			})
 			this.start = start
 			this.end = end
+			this.startValue = new Date(start)
+			this.endValue = new Date(end)
 		}
 	},
 	methods: {
-		show() {
-			!this.end &&
-				this.$nextTick(() => {
-					!this.end && this.$refs.endPicker.changeMonth(1)
-				})
+		show() {},
+		hide() {
+			this.pickCount = 0
+			tempDate.length = 0
 		},
 		clear() {
-			this.start = ''
-			this.end = ''
-			this.model = ''
+			this.start = this.end = this.startValue = this.endValue = this.model = ''
 		},
 		startChange(value) {
 			this.pickCount += 1
@@ -113,19 +119,28 @@ export default {
 			if (start.date - end.date > 0) {
 				this.start = end.text
 				this.end = start.text
+				this.startValue = end.date
+				this.endValue = start.date
 			} else {
 				this.start = start.text
 				this.end = end.text
+				this.startValue = start.date
+				this.endValue = end.date
 			}
 			this.model = dates.sort((a, b) => a - b)
-			this.pickCount = 0
-			tempDate.length = 0
 		},
 		formatDate(date, format) {
 			const y = date.getFullYear()
 			const m = date.getMonth() + 1
 			const d = date.getDate()
-			return `${y}-${('0' + m).slice(-2)}-${('0' + d).slice(-2)}`
+			let str
+			if (this.type.includes('date')) {
+				str = `${y}-${('0' + m).slice(-2)}-${('0' + d).slice(-2)}`
+			}
+			if (this.type.includes('month')) {
+				str = `${y}-${('0' + m).slice(-2)}`
+			}
+			return str
 		}
 	}
 }
@@ -133,8 +148,6 @@ export default {
 
 <style lang="scss">
 @import '../../styles/_var';
-.c-date-range-picker {
-}
 .c-picker-popper {
 	display: flex;
 	.c-picker-panel:first-child + div {

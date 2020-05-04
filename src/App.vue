@@ -3,6 +3,25 @@
 		<div class="picker-container">
 			<c-date-picker placeholder="选择日期"
 				v-model="checkDate"></c-date-picker>
+			<c-date-picker placeholder="选择日期"
+				style="margin-left:30px;"
+				v-model="checkDate2"
+				type="daterange"></c-date-picker>
+		</div>
+		<div class="picker-container">
+			<c-date-picker placeholder="选择月份"
+				v-model="checkDate1"
+				type="month"></c-date-picker>
+			<c-date-picker startPlaceholder="开始月份"
+				endPlaceholder="结束月份"
+				style="margin-left:30px;"
+				v-model="checkDate3"
+				type="monthrange"></c-date-picker>
+		</div>
+		<div class="picker-container">
+			<c-date-picker placeholder="选择年份"
+				v-model="checkDate4"
+				type="year"></c-date-picker>
 		</div>
 		<div>{{checkDate}}</div>
 		<div class="container">
@@ -70,6 +89,11 @@ export default {
 				{ begin_time: 1584637782000, end_time: 1584647361600 }
 			],
 			checkDate: '',
+			checkDate1: '',
+			checkDate2: '',
+			checkDate3: '',
+			checkDate4: '',
+			checkDate5: '',
 			value1: false,
 			value2: false,
 			value3: false
